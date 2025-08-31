@@ -4,7 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Brain, Mail, Lock, User, Github } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Brain, Mail, Lock, User, Github, Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface AuthFormProps {
   mode: "signin" | "signup";
@@ -18,16 +21,89 @@ export const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
     password: "",
     confirmPassword: ""
   });
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Auth form submitted:", formData);
-    // TODO: Implement authentication with Supabase
+    
+    if (mode === "signup" && formData.password !== formData.confirmPassword) {
+      toast({
+        title: "Error",
+        description: "Passwords do not match",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      if (mode === "signup") {
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/dashboard`,
+            data: {
+              full_name: formData.name,
+            },
+          },
+        });
+
+        if (error) throw error;
+
+        toast({
+          title: "Account Created!",
+          description: "Please check your email to verify your account.",
+        });
+      } else {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        });
+
+        if (error) throw error;
+
+        toast({
+          title: "Welcome back!",
+          description: "You've been successfully signed in.",
+        });
+        
+        navigate("/dashboard");
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSocialAuth = (provider: string) => {
-    console.log(`${provider} authentication requested`);
-    // TODO: Implement social authentication
+  const handleSocialAuth = async (provider: "google" | "github") => {
+    setLoading(true);
+    
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || `Failed to sign in with ${provider}`,
+        variant: "destructive",
+      });
+      setLoading(false);
+    }
   };
 
   return (
@@ -68,6 +144,7 @@ export const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
                 variant="outline" 
                 className="w-full" 
                 onClick={() => handleSocialAuth("google")}
+                disabled={loading}
               >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -81,6 +158,7 @@ export const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
                 variant="outline" 
                 className="w-full" 
                 onClick={() => handleSocialAuth("github")}
+                disabled={loading}
               >
                 <Github className="w-5 h-5 mr-2" />
                 Continue with GitHub
@@ -166,8 +244,15 @@ export const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
                 </div>
               )}
 
-              <Button type="submit" className="w-full gradient-bg glow-primary">
-                {mode === "signin" ? "Sign In" : "Create Account"}
+              <Button type="submit" className="w-full gradient-bg glow-primary" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {mode === "signin" ? "Signing In..." : "Creating Account..."}
+                  </>
+                ) : (
+                  mode === "signin" ? "Sign In" : "Create Account"
+                )}
               </Button>
             </form>
 
