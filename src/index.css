@@ -1,96 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* AI Study Assistant Design System - Modern Education Platform */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core Brand Colors - Deep Blues & Vibrant Greens */
+    --background: 220 20% 98%;
+    --foreground: 220 20% 8%;
 
+    /* Brand Identity - AI Study Assistant */
+    --primary: 217 91% 60%; /* Bright blue for trust & intelligence */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 217 100% 70%; /* Lighter blue for glows */
+    
+    --secondary: 142 76% 36%; /* Forest green for growth */
+    --secondary-foreground: 0 0% 100%;
+    
+    --success: 150 100% 35%; /* Emerald for achievements */
+    --success-foreground: 0 0% 100%;
+    
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 220 20% 8%;
+    --card-border: 220 13% 91%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 220 20% 8%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 8.9% 46%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 217 100% 97%; /* Very light blue for highlights */
+    --accent-foreground: 217 91% 60%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* Slightly larger for modern feel */
 
-    --sidebar-background: 0 0% 98%;
+    /* AI Study Assistant Specific Design Tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 100% 70%));
+    --gradient-secondary: linear-gradient(135deg, hsl(142 76% 36%), hsl(150 100% 35%));
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 60%), hsl(142 76% 36%));
+    
+    /* Glassmorphism Effects */
+    --glass-bg: hsla(0, 0%, 100%, 0.1);
+    --glass-border: hsla(220, 13%, 91%, 0.2);
+    --glass-shadow: 0 8px 32px hsla(217, 91%, 60%, 0.1);
+    
+    /* Shadows for depth */
+    --shadow-sm: 0 2px 4px hsla(220, 20%, 8%, 0.05);
+    --shadow-md: 0 4px 12px hsla(220, 20%, 8%, 0.1);
+    --shadow-lg: 0 8px 32px hsla(220, 20%, 8%, 0.15);
+    --shadow-glow: 0 0 40px hsla(217, 91%, 60%, 0.2);
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
+    /* Sidebar specific */
+    --sidebar-background: 220 20% 98%;
+    --sidebar-foreground: 220 20% 15%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 100% 97%;
+    --sidebar-accent-foreground: 217 91% 60%;
     --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 217 91% 60%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark theme for AI Study Assistant */
+    --background: 220 27% 6%;
+    --foreground: 220 20% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 220 25% 8%;
+    --card-foreground: 220 20% 95%;
+    --card-border: 220 20% 15%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 220 25% 8%;
+    --popover-foreground: 220 20% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 217 100% 70%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 142 76% 36%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --success: 150 100% 35%;
+    --success-foreground: 0 0% 100%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --muted: 220 20% 12%;
+    --muted-foreground: 220 8% 60%;
 
-    --destructive: 0 62.8% 30.6%;
+    --accent: 220 25% 12%;
+    --accent-foreground: 217 91% 60%;
+
+    --destructive: 0 62.8% 50%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --border: 220 20% 15%;
+    --input: 220 20% 15%;
+    --ring: 217 91% 60%;
+
+    /* Dark glassmorphism */
+    --glass-bg: hsla(220, 25%, 8%, 0.8);
+    --glass-border: hsla(220, 20%, 15%, 0.3);
+    --glass-shadow: 0 8px 32px hsla(220, 27%, 6%, 0.5);
+
+    /* Dark shadows */
+    --shadow-sm: 0 2px 4px hsla(220, 27%, 6%, 0.3);
+    --shadow-md: 0 4px 12px hsla(220, 27%, 6%, 0.4);
+    --shadow-lg: 0 8px 32px hsla(220, 27%, 6%, 0.6);
+    --shadow-glow: 0 0 40px hsla(217, 91%, 60%, 0.3);
+
+    /* Dark sidebar */
+    --sidebar-background: 220 27% 6%;
+    --sidebar-foreground: 220 20% 85%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 220 25% 10%;
+    --sidebar-accent-foreground: 217 91% 60%;
+    --sidebar-border: 220 20% 15%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 
@@ -100,6 +136,80 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+/* AI Study Assistant Component Styles */
+@layer components {
+  /* Glass morphism card */
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  
+  /* Hero gradient text */
+  .gradient-text {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Animated gradient background */
+  .gradient-bg {
+    background: var(--gradient-primary);
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+  }
+  
+  /* Glow effects */
+  .glow-primary {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  /* Smooth transitions */
+  .transition-all {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer utilities {
+  /* Custom animations */
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% { 
+      box-shadow: 0 0 20px hsla(217, 91%, 60%, 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 40px hsla(217, 91%, 60%, 0.6);
+    }
+  }
+  
+  /* Utility classes */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
   }
 }
