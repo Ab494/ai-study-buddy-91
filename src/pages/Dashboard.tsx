@@ -15,8 +15,38 @@ import {
   Upload,
   Plus
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleAskAI = () => {
+    navigate("/chat");
+  };
+
+  const handleUploadMaterials = () => {
+    toast({
+      title: "Upload Materials",
+      description: "File upload functionality coming soon!",
+    });
+  };
+
+  const handleNewQuiz = () => {
+    toast({
+      title: "New Quiz",
+      description: "Quiz creation functionality coming soon!",
+    });
+  };
+
+  const handleTakeQuiz = () => {
+    toast({
+      title: "Take Quiz",
+      description: "Quiz taking functionality coming soon!",
+    });
+  };
+
   // Mock data - would come from API/Supabase
   const stats = {
     questionsAsked: 12,
@@ -51,11 +81,11 @@ const Dashboard = () => {
             </p>
           </div>
           <div className="flex space-x-3">
-            <Button className="gradient-bg">
+            <Button className="gradient-bg" onClick={handleAskAI}>
               <MessageSquare className="mr-2 h-4 w-4" />
               Ask AI Assistant
             </Button>
-            <Button variant="outline">
+            <Button variant="outline" onClick={handleUploadMaterials}>
               <Upload className="mr-2 h-4 w-4" />
               Upload Materials
             </Button>
@@ -130,7 +160,7 @@ const Dashboard = () => {
                     Your latest quiz attempts and scores
                   </CardDescription>
                 </div>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={handleNewQuiz}>
                   <Plus className="h-4 w-4 mr-1" />
                   New Quiz
                 </Button>
@@ -219,15 +249,15 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-3">
-              <Button variant="outline" className="h-20 flex-col space-y-2">
+              <Button variant="outline" className="h-20 flex-col space-y-2" onClick={handleAskAI}>
                 <MessageSquare className="h-6 w-6" />
                 <span>Ask AI Assistant</span>
               </Button>
-              <Button variant="outline" className="h-20 flex-col space-y-2">
+              <Button variant="outline" className="h-20 flex-col space-y-2" onClick={handleTakeQuiz}>
                 <BookOpen className="h-6 w-6" />
                 <span>Take Quiz</span>
               </Button>
-              <Button variant="outline" className="h-20 flex-col space-y-2">
+              <Button variant="outline" className="h-20 flex-col space-y-2" onClick={handleUploadMaterials}>
                 <Upload className="h-6 w-6" />
                 <span>Upload Materials</span>
               </Button>

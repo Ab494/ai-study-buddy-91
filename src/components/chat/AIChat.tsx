@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +29,7 @@ interface Message {
 }
 
 const AIChat = () => {
+  const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -71,7 +73,10 @@ const AIChat = () => {
 
   const handleVoiceInput = () => {
     setIsListening(!isListening);
-    // TODO: Implement voice recognition
+    toast({
+      title: "Voice Input",
+      description: "Voice recognition feature coming soon!",
+    });
   };
 
   const handleImageUpload = () => {
@@ -165,16 +170,39 @@ const AIChat = () => {
                     <span>{formatTime(message.timestamp)}</span>
                     {message.sender === "ai" && (
                       <>
-                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 w-6 p-0"
+                          onClick={() => {
+                            navigator.clipboard.writeText(message.text);
+                            toast({ title: "Copied to clipboard!" });
+                          }}
+                        >
                           <Copy className="h-3 w-3" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 w-6 p-0"
+                          onClick={() => toast({ title: "Text-to-speech coming soon!" })}
+                        >
                           <Volume2 className="h-3 w-3" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 w-6 p-0"
+                          onClick={() => toast({ title: "Thanks for the feedback!" })}
+                        >
                           <ThumbsUp className="h-3 w-3" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 w-6 p-0"
+                          onClick={() => toast({ title: "Thanks for the feedback!" })}
+                        >
                           <ThumbsDown className="h-3 w-3" />
                         </Button>
                       </>
@@ -229,7 +257,11 @@ const AIChat = () => {
                 <p className="text-sm text-muted-foreground mb-2">
                   You've reached your daily limit of {dailyLimit} questions
                 </p>
-                <Button size="sm" className="gradient-bg">
+                <Button 
+                  size="sm" 
+                  className="gradient-bg"
+                  onClick={() => toast({ title: "Premium upgrade coming soon!" })}
+                >
                   <Crown className="h-4 w-4 mr-1" />
                   Upgrade to Premium
                 </Button>
@@ -242,8 +274,12 @@ const AIChat = () => {
               accept="image/*"
               className="hidden"
               onChange={(e) => {
-                // TODO: Handle image upload
-                console.log("Image uploaded:", e.target.files);
+                if (e.target.files && e.target.files[0]) {
+                  toast({
+                    title: "Image Upload",
+                    description: "Image analysis feature coming soon!",
+                  });
+                }
               }}
             />
           </div>

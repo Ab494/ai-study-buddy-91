@@ -196,7 +196,7 @@ const LandingPage = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full mt-6" variant="outline">
+                <Button className="w-full mt-6" variant="outline" onClick={() => window.location.href = '/auth'}>
                   Get Started Free
                 </Button>
               </CardContent>
@@ -229,7 +229,7 @@ const LandingPage = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full mt-6 gradient-bg glow-primary">
+                <Button className="w-full mt-6 gradient-bg glow-primary" onClick={() => alert('Premium upgrade coming soon!')}>
                   Upgrade to Premium
                 </Button>
               </CardContent>
