@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { 
   Brain, 
   BookOpen, 
@@ -40,7 +41,44 @@ export const DashboardLayout = ({
   userName = "Alex Smith",
   isPremium = false 
 }: DashboardLayoutProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState("overview");
+
+  // Update active tab based on current route
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === "/dashboard") {
+      setActiveTab("overview");
+    } else if (path === "/chat") {
+      setActiveTab("chat");
+    } else {
+      setActiveTab("overview");
+    }
+  }, [location.pathname]);
+
+  const handleNavigation = (itemId: string) => {
+    setActiveTab(itemId);
+    switch (itemId) {
+      case "overview":
+        navigate("/dashboard");
+        break;
+      case "chat":
+        navigate("/chat");
+        break;
+      case "quizzes":
+      case "materials":
+      case "achievements":
+      case "students":
+      case "analytics":
+      case "settings":
+        // These routes don't exist yet, could be added later
+        console.log(`Navigate to ${itemId} - feature coming soon`);
+        break;
+      default:
+        navigate("/dashboard");
+    }
+  };
 
   const studentMenuItems = [
     { id: "overview", label: "Dashboard", icon: BarChart3 },
@@ -80,7 +118,7 @@ export const DashboardLayout = ({
                     key={item.id}
                     variant={activeTab === item.id ? "secondary" : "ghost"}
                     className="w-full justify-start"
-                    onClick={() => setActiveTab(item.id)}
+                    onClick={() => handleNavigation(item.id)}
                   >
                     <item.icon className="mr-3 h-4 w-4" />
                     {item.label}
@@ -109,7 +147,7 @@ export const DashboardLayout = ({
                 <Button
                   variant="ghost"
                   className="w-full justify-start"
-                  onClick={() => setActiveTab("settings")}
+                  onClick={() => handleNavigation("settings")}
                 >
                   <Settings className="mr-3 h-4 w-4" />
                   Settings
