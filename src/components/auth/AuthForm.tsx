@@ -56,8 +56,10 @@ export const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
 
         toast({
           title: "Account Created!",
-          description: "Please check your email to verify your account.",
+          description: "Welcome to StudyAI! You can now start learning.",
         });
+        
+        navigate("/dashboard");
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({
           email: formData.email,
