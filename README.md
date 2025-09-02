@@ -1,4 +1,4 @@
-# AI StudyBuddy Project 🚀
+# My TypeScript Vite Project 🚀
 
 A modern web application built with **TypeScript** and **Vite**, designed for speed, scalability, and easy deployment.  
 This project is hosted on **[Netlify](https://www.netlify.com/)** for seamless CI/CD and fast global delivery.
@@ -142,9 +142,16 @@ This project is licensed under the MIT License – feel free to use and modify f
 
 ---
 
-## 💡 Authors
+### Collaborators
 
-Built with ❤️ by **Your Name**
+- **Marion Kipruto**  
+  Email: marionrutto21@gmail.com
+- **Brilliant Oluoch**  
+  Email: brilliantoluoch01@gmail.com
+- **Marion Achieng**  
+  Email: marionachieng603@gmail.com
+- **Moses Mbugua**  
+  Email: mosesnjuguna601@gmail.com
 
 Deployed on Netlify 🌐
 
