@@ -1,4 +1,4 @@
-# My TypeScript Vite Project 🚀
+# AI StudyBuddy 🚀
 
 A modern web application built with **TypeScript** and **Vite**, designed for speed, scalability, and easy deployment.  
 This project is hosted on **[Netlify](https://www.netlify.com/)** for seamless CI/CD and fast global delivery.
