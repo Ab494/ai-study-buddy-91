@@ -1,73 +1,151 @@
-# Welcome to your Lovable project
+# My TypeScript Vite Project 🚀
 
-## Project info
+A modern web application built with **TypeScript** and **Vite**, designed for speed, scalability, and easy deployment.  
+This project is hosted on **[Netlify](https://www.netlify.com/)** for seamless CI/CD and fast global delivery.
 
-**URL**: https://lovable.dev/projects/4264b13e-f057-4992-a6d7-93f7b63e6d03
+---
 
-## How can I edit this code?
+## 📂 Project Structure
 
-There are several ways of editing your application.
+```
+├── public/            # Static assets (images, fonts, etc.)
+├── src/               # Application source code
+│   ├── assets/        # App-specific assets
+│   ├── components/    # Reusable UI components
+│   ├── pages/         # Page-level components
+│   ├── App.tsx        # Root app component
+│   ├── main.tsx       # App entry point
+├── index.html         # HTML template
+├── tsconfig.json      # TypeScript configuration
+├── vite.config.ts     # Vite configuration
+├── package.json       # Dependencies and scripts
+```
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4264b13e-f057-4992-a6d7-93f7b63e6d03) and start prompting.
+## 🛠️ Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Vite** – Lightning-fast development build tool
+- **TypeScript** – Static typing for reliability
+- **React (optional)** – For building modern UIs
+- **ESLint + Prettier** – Code linting & formatting
+- **Netlify** – Hosting & deployment
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🚀 Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 1. Clone the Repository
 
-Follow these steps:
+```bash
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### 2. Install Dependencies
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+```bash
+npm install
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+### 3. Run Development Server
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+This starts the app at [http://localhost:5173](http://localhost:5173)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 4. Build for Production
 
-**Use GitHub Codespaces**
+```bash
+npm run build
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### 5. Preview Production Build
 
-## What technologies are used for this project?
+```bash
+npm run preview
+```
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🌐 Deployment (Netlify)
 
-## How can I deploy this project?
+1. Push your code to GitHub/GitLab/Bitbucket.
+2. Go to [Netlify](https://www.netlify.com/) → **New Site from Git**.
+3. Select your repository.
+4. Set Build Command:  
+   ```
+   npm run build
+   ```
+5. Set Publish Directory:  
+   ```
+   dist
+   ```
+6. Click **Deploy Site** 🎉
 
-Simply open [Lovable](https://lovable.dev/projects/4264b13e-f057-4992-a6d7-93f7b63e6d03) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+## ⚙️ Environment Variables
 
-Yes, you can!
+If you need API keys or secrets, create a `.env` file:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```
+VITE_API_URL=https://api.example.com
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Access in code:
+
+```ts
+const apiUrl = import.meta.env.VITE_API_URL;
+```
+
+On Netlify, add these under:  
+**Site Settings → Build & Deploy → Environment Variables**
+
+---
+
+## 🌍 Custom Domain
+
+1. Buy a domain (e.g. Namecheap, Google Domains).
+2. In Netlify Dashboard → Domain Settings, add your custom domain.
+3. Update DNS records to point to Netlify.
+4. Enable HTTPS with Let’s Encrypt SSL (1-click in Netlify).
+
+---
+
+## 🧪 Scripts
+
+```bash
+npm run dev       # Start dev server
+npm run build     # Build production app
+npm run preview   # Preview build
+npm run lint      # Lint code
+```
+
+---
+
+## 📖 Contributing
+
+1. Fork the repo
+2. Create a new branch (`feature/awesome-feature`)
+3. Commit changes (`git commit -m "Add awesome feature"`)
+4. Push branch (`git push origin feature/awesome-feature`)
+5. Open a Pull Request
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License – feel free to use and modify for your needs.
+
+---
+
+## 💡 Authors
+
+Built with ❤️ by **Your Name**
+
+Deployed on Netlify 🌐
+
+---
