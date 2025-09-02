@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Sidebar, SidebarContent, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { useSubscription } from "@/hooks/useSubscription";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -44,6 +45,7 @@ export const DashboardLayout = ({
   const navigate = useNavigate();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("overview");
+  const { createCheckout, openCustomerPortal, loading } = useSubscription();
 
   // Update active tab based on current route
   useEffect(() => {
@@ -136,8 +138,8 @@ export const DashboardLayout = ({
                   <p className="text-sm opacity-90 mb-3">
                     Get unlimited AI questions and advanced features
                   </p>
-                  <Button variant="secondary" size="sm" className="w-full">
-                    Upgrade Now
+                  <Button variant="secondary" size="sm" className="w-full" onClick={createCheckout} disabled={loading}>
+                    {loading ? 'Processing...' : 'Upgrade Now'}
                   </Button>
                 </div>
               )}
@@ -217,9 +219,15 @@ export const DashboardLayout = ({
                       <span>Settings</span>
                     </DropdownMenuItem>
                     {!isPremium && (
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={createCheckout} disabled={loading}>
                         <Crown className="mr-2 h-4 w-4" />
-                        <span>Upgrade to Premium</span>
+                        <span>{loading ? 'Processing...' : 'Upgrade to Premium'}</span>
+                      </DropdownMenuItem>
+                    )}
+                    {isPremium && (
+                      <DropdownMenuItem onClick={openCustomerPortal} disabled={loading}>
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>{loading ? 'Loading...' : 'Manage Subscription'}</span>
                       </DropdownMenuItem>
                     )}
                     <DropdownMenuSeparator />

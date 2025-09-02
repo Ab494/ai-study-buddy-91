@@ -13,14 +13,18 @@ import {
   Target,
   Zap,
   Upload,
-  Plus
+  Plus,
+  Crown,
+  Settings
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useSubscription } from "@/hooks/useSubscription";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { subscription, loading, createCheckout, openCustomerPortal } = useSubscription();
 
   const handleAskAI = () => {
     navigate("/chat");
@@ -70,7 +74,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <DashboardLayout userRole="student" userName="Alex Smith" isPremium={false}>
+    <DashboardLayout userRole="student" userName="Alex Smith" isPremium={subscription.subscribed}>
       <div className="space-y-6">
         {/* Welcome Section */}
         <div className="flex items-center justify-between">
@@ -150,6 +154,82 @@ const Dashboard = () => {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
+          {/* Subscription Status */}
+          <Card className="glass-card border-0">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <Crown className="h-5 w-5 text-yellow-500" />
+                    Subscription Status
+                  </CardTitle>
+                  <CardDescription>
+                    Manage your StudyAI subscription
+                  </CardDescription>
+                </div>
+                {subscription.subscribed && (
+                  <Badge variant="secondary" className="bg-success/20 text-success">
+                    Premium
+                  </Badge>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {subscription.subscribed ? (
+                <div className="space-y-3">
+                  <div className="p-4 rounded-lg bg-success/10 border border-success/20">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-success">Premium Active</h4>
+                        <p className="text-sm text-muted-foreground">
+                          {subscription.subscription_tier} Plan
+                        </p>
+                        {subscription.subscription_end && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Renews on {new Date(subscription.subscription_end).toLocaleDateString()}
+                          </p>
+                        )}
+                      </div>
+                      <Crown className="h-8 w-8 text-yellow-500" />
+                    </div>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    onClick={openCustomerPortal}
+                    disabled={loading}
+                    className="w-full"
+                  >
+                    <Settings className="mr-2 h-4 w-4" />
+                    {loading ? 'Loading...' : 'Manage Subscription'}
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <h4 className="font-medium">Free Plan</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Limited features and daily usage
+                    </p>
+                  </div>
+                  <Button 
+                    className="w-full gradient-bg glow-primary" 
+                    onClick={createCheckout}
+                    disabled={loading}
+                  >
+                    <Crown className="mr-2 h-4 w-4" />
+                    {loading ? 'Processing...' : 'Upgrade to Premium'}
+                  </Button>
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <p>• Unlimited AI questions</p>
+                    <p>• Advanced study analytics</p>
+                    <p>• Voice & image support</p>
+                    <p>• Priority support</p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           {/* Recent Quizzes */}
           <Card className="glass-card border-0">
             <CardHeader>

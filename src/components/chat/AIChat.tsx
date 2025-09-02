@@ -19,6 +19,7 @@ import {
   ThumbsDown
 } from "lucide-react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { useSubscription } from "@/hooks/useSubscription";
 
 interface Message {
   id: string;
@@ -30,6 +31,7 @@ interface Message {
 
 const AIChat = () => {
   const { toast } = useToast();
+  const { subscription, createCheckout, loading } = useSubscription();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -42,8 +44,8 @@ const AIChat = () => {
   const [inputValue, setInputValue] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [questionsUsed] = useState(12);
-  const [dailyLimit] = useState(15);
-  const [isPremium] = useState(false);
+  const dailyLimit = subscription.subscribed ? 1000 : 15;
+  const isPremium = subscription.subscribed;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSendMessage = () => {
@@ -260,10 +262,11 @@ const AIChat = () => {
                 <Button 
                   size="sm" 
                   className="gradient-bg"
-                  onClick={() => toast({ title: "Premium upgrade coming soon!" })}
+                  onClick={createCheckout}
+                  disabled={loading}
                 >
                   <Crown className="h-4 w-4 mr-1" />
-                  Upgrade to Premium
+                  {loading ? 'Processing...' : 'Upgrade to Premium'}
                 </Button>
               </div>
             )}

@@ -3,8 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Check, Brain, BookOpen, MessageSquare, Users, Star, Zap, Shield } from "lucide-react";
 import heroImage from "@/assets/hero-education.jpg";
+import { useNavigate } from "react-router-dom";
+import { useSubscription } from "@/hooks/useSubscription";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+  const { createCheckout, loading } = useSubscription();
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -229,8 +233,12 @@ const LandingPage = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full mt-6 gradient-bg glow-primary" onClick={() => alert('Premium upgrade coming soon!')}>
-                  Upgrade to Premium
+                <Button 
+                  className="w-full mt-6 gradient-bg glow-primary" 
+                  onClick={createCheckout}
+                  disabled={loading}
+                >
+                  {loading ? 'Processing...' : 'Upgrade to Premium'}
                 </Button>
               </CardContent>
             </Card>
