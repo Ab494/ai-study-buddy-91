@@ -4,6 +4,12 @@ A comprehensive AI-powered study assistant for students and teachers, featuring 
 
 ---
 
+## 🌐 [View Live](https://aibuddystudy.netlify.app/)
+
+Check out the live deployed version of the app [here](https://aibuddystudy.netlify.app/).
+
+---
+
 ## 📌 Comprehensive Prompt
 
 > **Prompt Used for Building This Project:**  
@@ -95,8 +101,8 @@ A comprehensive AI-powered study assistant for students and teachers, featuring 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Ab494/ai-study-buddy-91.git
-cd ai-study-buddy-91
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
 ```
 
 ### 2. Install Dependencies
@@ -211,9 +217,6 @@ MIT License – feel free to use and modify for your needs.
 
 ---
 
-## 💡 Author
-
-Built with ❤️ by **Your Name**
 
 Deployed on Netlify 🌐
 
