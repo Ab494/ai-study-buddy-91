@@ -20,11 +20,47 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { User } from "@supabase/supabase-js";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { subscription, loading, createCheckout, openCustomerPortal } = useSubscription();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Get initial user session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription: authSubscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => authSubscription.unsubscribe();
+  }, []);
+
+  // Get user display name from user metadata or email
+  const getUserDisplayName = () => {
+    if (!user) return "Guest";
+    
+    // Try to get name from user metadata
+    const fullName = user.user_metadata?.full_name;
+    const firstName = user.user_metadata?.first_name;
+    const lastName = user.user_metadata?.last_name;
+    
+    if (fullName) return fullName;
+    if (firstName && lastName) return `${firstName} ${lastName}`;
+    if (firstName) return firstName;
+    
+    // Fallback to email username
+    const emailName = user.email?.split('@')[0];
+    return emailName || "User";
+  };
 
   const handleAskAI = () => {
     navigate("/chat");
@@ -74,7 +110,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <DashboardLayout userRole="student" userName="Alex Smith" isPremium={subscription.subscribed}>
+    <DashboardLayout userRole="student" userName={getUserDisplayName()} isPremium={subscription.subscribed}>
       <div className="space-y-6">
         {/* Welcome Section */}
         <div className="flex items-center justify-between">
