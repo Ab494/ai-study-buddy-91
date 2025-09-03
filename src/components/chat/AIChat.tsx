@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { useSubscription } from "@/hooks/useSubscription";
+import { supabase } from "@/integrations/supabase/client";
+import { User as SupabaseUser } from "@supabase/supabase-js";
 
 interface Message {
   id: string;
@@ -35,7 +37,7 @@ const AIChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Hello! I'm your AI learning assistant. I can help you with homework, explain concepts, generate quizzes, and answer questions about any subject. What would you like to learn today?",
+      text: "Hello! I'm StudyAI, your direct and knowledgeable learning assistant. I provide clear, factual answers to help you understand any subject. Ask me anything about biology, math, history, science, or any topic you're studying!",
       sender: "ai",
       timestamp: new Date(),
     }
@@ -43,34 +45,115 @@ const AIChat = () => {
   
   const [inputValue, setInputValue] = useState("");
   const [isListening, setIsListening] = useState(false);
-  const [questionsUsed] = useState(12);
+  const [questionsUsed, setQuestionsUsed] = useState(12);
+  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const dailyLimit = subscription.subscribed ? 1000 : 15;
   const isPremium = subscription.subscribed;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSendMessage = () => {
-    if (!inputValue.trim()) return;
+  useEffect(() => {
+    // Get initial user session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
 
-    const newMessage: Message = {
+    // Listen for auth changes
+    const { data: { subscription: authSubscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => authSubscription.unsubscribe();
+  }, []);
+
+  // Get user display name
+  const getUserDisplayName = () => {
+    if (!user) return "Guest";
+    
+    const fullName = user.user_metadata?.full_name;
+    const firstName = user.user_metadata?.first_name;
+    const lastName = user.user_metadata?.last_name;
+    
+    if (fullName) return fullName;
+    if (firstName && lastName) return `${firstName} ${lastName}`;
+    if (firstName) return firstName;
+    
+    const emailName = user.email?.split('@')[0];
+    return emailName || "User";
+  };
+
+  const handleSendMessage = async () => {
+    if (!inputValue.trim() || isLoading) return;
+
+    // Check if user has reached daily limit (non-premium only)
+    if (!isPremium && questionsUsed >= dailyLimit) {
+      toast({
+        title: "Daily Limit Reached",
+        description: "Upgrade to Premium for unlimited questions",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const userMessage: Message = {
       id: Date.now().toString(),
       text: inputValue,
       sender: "user",
       timestamp: new Date(),
     };
 
-    setMessages([...messages, newMessage]);
+    setMessages(prev => [...prev, userMessage]);
     setInputValue("");
+    setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      console.log('Sending message to AI:', inputValue);
+      
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { message: inputValue }
+      });
+
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw error;
+      }
+
+      console.log('AI response received:', data);
+
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: "I'd be happy to help you with that! Could you provide more specific details about what you're trying to learn or understand?",
+        text: data.response || "I apologize, but I couldn't generate a response. Please try again.",
         sender: "ai",
         timestamp: new Date(),
       };
+
       setMessages(prev => [...prev, aiResponse]);
-    }, 1000);
+      
+      // Increment question count for non-premium users
+      if (!isPremium) {
+        setQuestionsUsed(prev => prev + 1);
+      }
+
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: "I'm sorry, I'm having trouble responding right now. Please try again in a moment.",
+        sender: "ai",
+        timestamp: new Date(),
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+      
+      toast({
+        title: "Error",
+        description: "Failed to get AI response. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleVoiceInput = () => {
@@ -93,7 +176,7 @@ const AIChat = () => {
   };
 
   return (
-    <DashboardLayout userRole="student" userName="Alex Smith" isPremium={isPremium}>
+    <DashboardLayout userRole="student" userName={getUserDisplayName()} isPremium={isPremium}>
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -247,10 +330,14 @@ const AIChat = () => {
               </div>
               <Button
                 onClick={handleSendMessage}
-                disabled={!inputValue.trim() || (!isPremium && questionsUsed >= dailyLimit)}
+                disabled={!inputValue.trim() || isLoading || (!isPremium && questionsUsed >= dailyLimit)}
                 className="gradient-bg"
               >
-                <Send className="h-4 w-4" />
+                {isLoading ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
               </Button>
             </div>
             
