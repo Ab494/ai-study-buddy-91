@@ -47,34 +47,53 @@ export const useSubscription = () => {
   const createCheckout = async () => {
     try {
       setLoading(true);
+      console.log('🔄 Starting checkout process...');
+      
       const { data: { session } } = await supabase.auth.getSession();
+      console.log('🔐 Auth session:', session ? 'Found' : 'Not found');
       
       if (!session) {
+        console.log('❌ No session found, redirecting to auth');
         toast({
           title: "Authentication Required",
           description: "Please sign in to upgrade to premium",
           variant: "destructive"
         });
+        // Redirect to auth page instead of just showing toast
+        window.location.href = '/auth';
         return;
       }
 
+      console.log('📡 Invoking create-checkout function...');
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Edge function error:', error);
+        throw error;
+      }
+
+      console.log('✅ Checkout response:', data);
 
       // Open Stripe checkout in new tab
       if (data?.url) {
+        console.log('🔗 Opening checkout URL:', data.url);
         window.open(data.url, '_blank');
+        toast({
+          title: "Redirecting to Checkout",
+          description: "Opening Stripe payment form in new tab",
+        });
+      } else {
+        throw new Error('No checkout URL received');
       }
     } catch (error) {
-      console.error('Error creating checkout:', error);
+      console.error('❌ Error creating checkout:', error);
       toast({
         title: "Error",
-        description: "Failed to create checkout session",
+        description: "Failed to create checkout session. Please try again.",
         variant: "destructive"
       });
     } finally {
