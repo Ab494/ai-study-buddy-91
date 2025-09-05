@@ -101,8 +101,8 @@ Check out the live deployed version of the app [here](https://aibuddystudy.netli
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
+git clone https://github.com/Ab494/ai-study-buddy-91.git
+cd ai-study-buddy-91
 ```
 
 ### 2. Install Dependencies
