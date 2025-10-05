@@ -68,12 +68,19 @@ export const DashboardLayout = ({
       case "chat":
         navigate("/chat");
         break;
+      case "settings":
+        // Open subscription management for settings
+        if (isPremium) {
+          openCustomerPortal();
+        } else {
+          navigate("/dashboard");
+        }
+        break;
       case "quizzes":
       case "materials":
       case "achievements":
       case "students":
       case "analytics":
-      case "settings":
         // These routes don't exist yet, could be added later
         console.log(`Navigate to ${itemId} - feature coming soon`);
         break;
@@ -214,7 +221,7 @@ export const DashboardLayout = ({
                       <User className="mr-2 h-4 w-4" />
                       <span>Profile</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/dashboard")}>
                       <Settings className="mr-2 h-4 w-4" />
                       <span>Settings</span>
                     </DropdownMenuItem>
