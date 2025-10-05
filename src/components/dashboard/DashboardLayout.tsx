@@ -68,14 +68,9 @@ export const DashboardLayout = ({
       case "chat":
         navigate("/chat");
         break;
-      case "settings":
-        // Open subscription management for settings
-        if (isPremium) {
-          openCustomerPortal();
-        } else {
-          navigate("/dashboard");
-        }
-        break;
+        case "settings":
+          navigate("/settings");
+          break;
       case "quizzes":
       case "materials":
       case "achievements":
@@ -221,7 +216,7 @@ export const DashboardLayout = ({
                       <User className="mr-2 h-4 w-4" />
                       <span>Profile</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+                    <DropdownMenuItem onClick={() => navigate("/settings")}>
                       <Settings className="mr-2 h-4 w-4" />
                       <span>Settings</span>
                     </DropdownMenuItem>
